@@ -11,7 +11,7 @@ while True:
     tok = lexer.token()
     if not tok:
         break
-    print("%d: %s(%s)" % (tok.lineno, tok.type, tok.value))
+    print("%s - %s " % ( tok.type, tok.value))
 #
 # lex.lex(debug=True, debuglog=log)
 # yacc.yacc(debug=True, debuglog=log)
