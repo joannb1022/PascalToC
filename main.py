@@ -1,17 +1,24 @@
 
 from ply import lex, yacc
-import my_scanner
+import my_lexer, my_parser
 
 test = open('test.pas', 'r')
 data = test.read()
-lexer = my_scanner.my_lexer
-lexer.input(data)
+lexer = my_lexer.Lexer()
+lexer.input_data(data)
 
+#
 while True:
     tok = lexer.token()
     if not tok:
         break
-    print("%s - %s " % ( tok.type, tok.value))
+    print("%s - %s " % (tok.type, tok.value))
+
+
+# lex.lex(debug=True)
+# yacc.yacc(debug=True)
 #
-# lex.lex(debug=True, debuglog=log)
-# yacc.yacc(debug=True, debuglog=log)
+# parser = my_parser.parser
+#
+# ast = parser.parse(data, lexer=lexer)
+# ast.printTree()

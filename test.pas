@@ -1,9 +1,8 @@
 program test;
 var
-    A : real;
-    C : real;
+    AB, TT : real;
 
-function sum(num : integer) : real;
+function sum(num : real) : real;
 begin
     if num = 1 then
     begin
@@ -16,6 +15,6 @@ begin
 end;
 
 begin
-    A := 1;
-    C := sum(A);
+    AB := 1;
+    TT := sum(AB);
 end.
