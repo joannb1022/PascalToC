@@ -1,20 +1,11 @@
-program test;
+program ifelseChecking;
 var
-    AB, TT : real;
-
-function sum(num : real) : real;
-begin
-    if num = 1 then
-    begin
-        sum := num + 25.3;
-    end
-    else
-    begin
-        sum := 100;
-    end;
-end;
+   a : integer;
 
 begin
-    AB := 1;
-    TT := sum(AB);
+   a := 100;
+   if a < 20 then
+      a = 10
+   else
+      a = 100
 end.
