@@ -1,0 +1,160 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    IDENTIFIER
+
+Grammar
+
+Rule 0     S' -> program
+Rule 1     empty -> <empty>
+Rule 2     program -> program_heading type_definition_part variable_declaration_part function_declaration_part compound_statement
+Rule 3     program_heading -> PROGRAM id SEMICOLON
+Rule 4     block -> declaration_part statement_part
+Rule 5     declaration_part -> type_definition_part variable_declaration_part function_declaration_part
+Rule 6     type_definition_part -> TYPE type_definition
+Rule 7     type_definition_part -> empty
+Rule 8     variable_declaration_part -> VAR variable_declaration_list
+Rule 9     variable_declaration_part -> empty
+Rule 10    function_declaration_part -> empty
+Rule 11    function_declaration_part -> function_declaration function_declaration_part
+Rule 12    function_declaration -> function_heading SEMICOLON block SEMICOLON
+Rule 13    function_heading -> FUNCTION id LPAREN parameters RPAREN COLON simple_type_name
+Rule 14    parameters -> names_list COLON simple_type_name
+Rule 15    parameters -> names_list COLON simple_type_name SEMICOLON parameters
+Rule 16    names_list -> id
+Rule 17    names_list -> id COMMA names_list
+Rule 18    type_definition -> id EQ ARRAY LPARENARR INTEGER DDD INTEGER RPARENARR OF simple_type_name SEMICOLON
+Rule 19    type_definition -> id COLON ARRAY LPARENARR INTEGER DDD INTEGER RPARENARR OF simple_type_name SEMICOLON
+Rule 20    statement_part -> compound_statement
+Rule 21    statement_part -> assignment_list
+Rule 22    statement_part -> while_statement
+Rule 23    statement_part -> if_else_statement
+Rule 24    statement_part -> expression
+Rule 25    statement_part -> empty
+Rule 26    while_statement -> WHILE expression DO statement_part
+Rule 27    if_else_statement -> IF expression THEN statement_part
+Rule 28    if_else_statement -> IF expression THEN statement_part ELSE statement_part
+Rule 29    compound_statement -> BEGIN statement_part END SEMICOLON
+Rule 30    compound_statement -> BEGIN statement_part END DOT
+Rule 31    assignment_list -> assignment statement_part
+Rule 32    assignment -> id ASSIGNMENT expression SEMICOLON
+Rule 33    assignment -> id LPARENARR term RPARENARR ASSIGNMENT expression SEMICOLON
+Rule 34    expression -> term
+Rule 35    expression -> expression sign term
+Rule 36    expression -> expression and_or expression
+Rule 37    and_or -> AND
+Rule 38    and_or -> OR
+Rule 39    sign -> PLUS
+Rule 40    sign -> MINUS
+Rule 41    sign -> EQ
+Rule 42    sign -> NEQ
+Rule 43    sign -> GT
+Rule 44    sign -> LT
+Rule 45    sign -> GTE
+Rule 46    sign -> LTE
+Rule 47    term -> integer
+Rule 48    term -> real
+Rule 49    term -> char
+Rule 50    term -> string
+Rule 51    term -> function_call
+Rule 52    term -> id
+Rule 53    integer -> INTEGER
+Rule 54    real -> REAL
+Rule 55    string -> STRING
+Rule 56    char -> CHAR
+Rule 57    function_call -> id LPAREN id_list RPAREN
+Rule 58    variable_declaration_list -> variable_declaration
+Rule 59    variable_declaration_list -> variable_declaration variable_declaration_list
+Rule 60    variable_declaration -> id_list COLON simple_type_name SEMICOLON
+Rule 61    variable_declaration -> type_definition
+Rule 62    id_list -> id
+Rule 63    id_list -> id COMMA id_list
+Rule 64    simple_type_name -> SSTRING
+Rule 65    simple_type_name -> SCHAR
+Rule 66    simple_type_name -> SREAL
+Rule 67    simple_type_name -> SINTEGER
+Rule 68    id -> id
+
+Terminals, with rules where they appear
+
+AND                  : 37
+ARRAY                : 18 19
+ASSIGNMENT           : 32 33
+BEGIN                : 29 30
+CHAR                 : 56
+COLON                : 13 14 15 19 60
+COMMA                : 17 63
+DDD                  : 18 19
+DO                   : 26
+DOT                  : 30
+ELSE                 : 28
+END                  : 29 30
+EQ                   : 18 41
+FUNCTION             : 13
+GT                   : 43
+GTE                  : 45
+IDENTIFIER           : 
+IF                   : 27 28
+INTEGER              : 18 18 19 19 53
+LPAREN               : 13 57
+LPARENARR            : 18 19 33
+LT                   : 44
+LTE                  : 46
+MINUS                : 40
+NEQ                  : 42
+OF                   : 18 19
+OR                   : 38
+PLUS                 : 39
+PROGRAM              : 3
+REAL                 : 54
+RPAREN               : 13 57
+RPARENARR            : 18 19 33
+SCHAR                : 65
+SEMICOLON            : 3 12 12 15 18 19 29 32 33 60
+SINTEGER             : 67
+SREAL                : 66
+SSTRING              : 64
+STRING               : 55
+THEN                 : 27 28
+TYPE                 : 6
+VAR                  : 8
+WHILE                : 26
+error                : 
+
+Nonterminals, with rules where they appear
+
+and_or               : 36
+assignment           : 31
+assignment_list      : 21
+block                : 12
+char                 : 49
+compound_statement   : 2 20
+declaration_part     : 4
+empty                : 7 9 10 25
+expression           : 24 26 27 28 32 33 35 36 36
+function_call        : 51
+function_declaration : 11
+function_declaration_part : 2 5 11
+function_heading     : 12
+id                   : 3 13 16 17 18 19 32 33 52 57 62 63 68
+id_list              : 57 60 63
+if_else_statement    : 23
+integer              : 47
+names_list           : 14 15 17
+parameters           : 13 15
+program              : 0
+program_heading      : 2
+real                 : 48
+sign                 : 35
+simple_type_name     : 13 14 15 18 19 60
+statement_part       : 4 26 27 28 28 29 30 31
+string               : 50
+term                 : 33 34 35
+type_definition      : 6 61
+type_definition_part : 2 5
+variable_declaration : 58 59
+variable_declaration_list : 8 59
+variable_declaration_part : 2 5
+while_statement      : 22
+

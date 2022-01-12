@@ -27,7 +27,6 @@ def p_program_heading(p):
     program_heading : PROGRAM identifier SEMICOLON
     '''
     p[0] = ProgramHeading(p[1])
-    # p[0] = p[1]
 
 
 def p_block(p):
@@ -105,21 +104,12 @@ def p_names_list(p):
 
 def p_type_definition(p):
     '''
-    type_definition : identifier EQ ARRAY LPARENARR INTEGER COMMA INTEGER RPARENARR OF simple_type_name SEMICOLON
+    type_definition : identifier EQ ARRAY LPARENARR INTEGER DD INTEGER RPARENARR OF simple_type_name SEMICOLON
+                    | identifier COLON ARRAY LPARENARR INTEGER DD INTEGER RPARENARR OF simple_type_name SEMICOLON
     '''
 
     p[0] = ArrayType(p[1], p[5], p[7], p[10])
 
-def p_statement_list(p):
-    '''
-    statement_list : statement_part
-                    | statement_part statement_list
-    '''
-
-    if len(p) == 2:
-        p[0] = p[1]
-    else:
-        p[0] = StatementList(p[1],p[2])
 
 def p_statement_part(p):
     '''
@@ -140,7 +130,7 @@ def p_while_statement(p):
 
     p[0] = While(p[2], p[4])
 
-def p_else_statement(p):
+def p_if_else_statement(p):
     '''
     if_else_statement : IF expression THEN statement_part
                         | IF expression THEN statement_part ELSE statement_part
@@ -154,7 +144,7 @@ def p_else_statement(p):
 def p_compound_statement(p):
     ''' compound_statement : BEGIN statement_part END SEMICOLON
                             | BEGIN statement_part END DOT
-                            | empty '''
+                             '''
     if len(p) == 2:
         p[0] = p[1]
     else:
@@ -163,9 +153,7 @@ def p_compound_statement(p):
 
 def p_assignment_list(p):
     '''
-    assignment_list : assignment
-                    | assignment assignment_list
-                    | assignment statement_part
+    assignment_list : assignment statement_part
     '''
 
     if len(p) == 2:
@@ -175,21 +163,27 @@ def p_assignment_list(p):
 
 
 def p_assingment(p):
-    """ assignment : identifier ASSIGNMENT expression SEMICOLON """
-    print("ass")
+    """ assignment : identifier ASSIGNMENT expression SEMICOLON
+                    | identifier LPARENARR term RPARENARR ASSIGNMENT expression SEMICOLON """
     if len(p) == 2:
-        p[0] = p[1]
-    else:
         p[0] = Assignment(p[1], p[3])
+    else:
+        p[0] = ArrayAssignment(p[1], p[3], p[6])
 
 
 def p_expression(p):
     ''' expression : term
-                    | expression sign term '''
+                    | expression sign term
+                    | expression and_or expression'''
     if len(p) == 2:
         p[0] = p[1]
     else:
         p[0] = Expression(p[1], p[2], p[3])
+
+def p_and_or(p):
+    ''' and_or : AND
+                | OR'''
+    p[0] = AndOr(p[1])
 
 
 def p_sign(p):
@@ -211,7 +205,6 @@ def p_term(p):
             | char
             | string
             | function_call
-            | empty
             | identifier
     '''
 
@@ -257,8 +250,12 @@ def p_variable_declaration_list(p):
 def p_variable_declaration(p):
     '''
     variable_declaration : identifier_list COLON simple_type_name SEMICOLON
+                        | type_definition
     '''
-    p[0] = VariableDeclaration(p[1], p[3])
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = VariableDeclaration(p[1], p[3])
 
 
 def p_identifier_list(p):
@@ -270,15 +267,6 @@ def p_identifier_list(p):
         p[0] = p[1]
     else:
         p[0] = IdentifierList(p[1], p[3])
-
-
-def p_simple_type(p):
-    ''' simple_type : STRING
-                    | CHAR
-                    | REAL
-                    | INTEGER
-                     '''
-    p[0] = Type(p[1])
 
 
 def p_simple_type_name(p):

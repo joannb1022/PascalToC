@@ -1,4 +1,5 @@
 from ply import lex
+
 tokens = (
 
     'IDENTIFIER',
@@ -6,7 +7,8 @@ tokens = (
     'SEMICOLON',
     'COLON',
     'COMMA',
-    'DDD',
+    'DD',
+
     'PROGRAM',
     'DOT',
     'VAR',
@@ -18,9 +20,10 @@ tokens = (
     'ELSE',
     'WHILE',
     'DO',
+
     'AND',
     'OR',
-    'NOT',
+
     'PLUS',
     'MINUS',
     'EQ',
@@ -29,17 +32,22 @@ tokens = (
     'GT',
     'LTE',
     'GTE',
+
     'LPAREN',
     'RPAREN',
+
     'FUNCTION',
+
     'INTEGER',
     'REAL',
     'STRING',
     'CHAR',
+
     'ARRAY',
     'LPARENARR',
     'RPARENARR',
     'OF',
+
     'SREAL',
     'SINTEGER',
     'SSTRING',
@@ -57,7 +65,6 @@ t_COMMA = r","
 t_PLUS = r"\+"
 t_MINUS = r"\-"
 
-
 t_EQ = r"\="
 t_NEQ = r"\<\>"
 t_LT = r"\<"
@@ -69,7 +76,7 @@ t_LPAREN = r"\("
 t_RPAREN = r"\)"
 t_LPARENARR = r"\["
 t_RPARENARR = r"\]"
-t_DDD = r"\..."
+t_DDD = r"\.."
 
 reserved_keywords = {
     'program': 'PROGRAM',
@@ -81,12 +88,10 @@ reserved_keywords = {
     'if': 'IF',
     'then': 'THEN',
     'else': 'ELSE',
-    'for': 'FOR',
     'while': 'WHILE',
-    'do' : 'DO',
+    'do': 'DO',
     'and': 'AND',
     'or': 'OR',
-    'not': 'NOT',
 
     'function': 'FUNCTION',
 
@@ -94,14 +99,15 @@ reserved_keywords = {
     'integer': 'SINTEGER',
     'string': 'SSTRING',
     'char': 'SCHAR',
-    'array' : 'ARRAY',
-    'of' : 'OF'
+    'array': 'ARRAY',
+    'of': 'OF'
 }
 
 
 def t_BOOLEAN(t):
     r"true|false"
     return t
+
 
 def t_IDENTIFIER(t):
     r"[a-zA-Z][a-zA-Z0-9]*"
@@ -137,10 +143,8 @@ def t_newline(t):
     t.lexer.lineno += len(t.value)
 
 
-# A string containing ignored characters (spaces and tabs).
 t_ignore = ' \t'
 
 
-# Error handling rule
 def t_error(t):
     print("Illegal character '%s'" % t.value[0])
