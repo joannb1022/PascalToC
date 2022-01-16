@@ -17,7 +17,7 @@ def p_empty(p):
 
 def p_program(p):
     '''
-    program : program_heading type_definition_part variable_declaration_part function_declaration_part compound_statement
+    program : program_heading type_definition_part variable_declaration_part function_declaration_part compound_statement DOT
     '''
     p[0] = Program(p[1], p[2], p[3], p[4], p[5])
 
@@ -31,21 +31,14 @@ def p_program_heading(p):
 
 def p_block(p):
     '''
-    block :  declaration_part statement_part
+    block :  variable_declaration_part BEGIN statement_list END SEMICOLON
     '''
-    p[0] = Block(p[1], p[2])
-
-
-def p_declaration_part(p):
-    '''
-    declaration_part : type_definition_part variable_declaration_part function_declaration_part
-    '''
-    p[0] = Declaration(p[1], p[2], p[3])
+    p[0] = Block(p[1], p[3])
 
 
 def p_type_definition_part(p):
     '''
-    type_definition_part : TYPE type_definition
+    type_definition_part : TYPE type_definition_list
                             | empty
     '''
     if len(p) > 2:
@@ -53,6 +46,16 @@ def p_type_definition_part(p):
     else:
         p[0] = p[1]
 
+def p_type_definition_list(p):
+    '''
+    type_definition_list : type_definition
+                        | type_definition type_definition_list
+    '''
+
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = TypeDefinitionList(p[1], p[2])
 
 def p_variable_declaration_part(p):
     '''
@@ -67,8 +70,9 @@ def p_variable_declaration_part(p):
 
 def p_function_declaration_part(p):
     '''
-    function_declaration_part : empty
-                            | function_declaration function_declaration_part '''
+    function_declaration_part : function_declaration function_declaration_part
+                                | empty
+    '''
     if len(p) > 2:
         p[0] = Function(p[1], p[2])
     else:
@@ -76,7 +80,7 @@ def p_function_declaration_part(p):
 
 
 def p_function_declaration(p):
-    ''' function_declaration : function_heading SEMICOLON block SEMICOLON'''
+    ''' function_declaration : function_heading SEMICOLON block'''
 
     p[0] = FunctionDeclaration(p[1], p[3])
 
@@ -105,11 +109,19 @@ def p_names_list(p):
 def p_type_definition(p):
     '''
     type_definition : identifier EQ ARRAY LPARENARR INTEGER DD INTEGER RPARENARR OF simple_type_name SEMICOLON
-                    | identifier COLON ARRAY LPARENARR INTEGER DD INTEGER RPARENARR OF simple_type_name SEMICOLON
+
     '''
 
-    p[0] = ArrayType(p[1], p[5], p[7], p[10])
+    p[0] = ArrayTypeDefinition(p[1], p[5], p[7], p[10])
 
+def p_statement_list(p):
+    ''' statement_list : statement_part statement_list
+                        | empty '''
+
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = StatementPartList(p[1], p[2])
 
 def p_statement_part(p):
     '''
@@ -120,20 +132,23 @@ def p_statement_part(p):
                     | expression
                     | empty
     '''
-    p[0] = StatementPart(p[1])
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = StatementPartList(p[1], p[2])
 
 
 def p_while_statement(p):
     '''
-    while_statement : WHILE expression DO statement_part
+    while_statement : WHILE expression DO statement_part SEMICOLON
     '''
 
     p[0] = While(p[2], p[4])
 
 def p_if_else_statement(p):
     '''
-    if_else_statement : IF expression THEN statement_part
-                        | IF expression THEN statement_part ELSE statement_part
+    if_else_statement : IF expression THEN statement_list SEMICOLON
+                        | IF expression THEN statement_list ELSE statement_list SEMICOLON
     '''
 
     if len(p) == 5:
@@ -142,18 +157,14 @@ def p_if_else_statement(p):
         p[0] = IfElse(p[2], p[4], p[6])
 
 def p_compound_statement(p):
-    ''' compound_statement : BEGIN statement_part END SEMICOLON
-                            | BEGIN statement_part END DOT
+    ''' compound_statement : BEGIN statement_list END ending
                              '''
-    if len(p) == 2:
-        p[0] = p[1]
-    else:
-        p[0] = StatementPart(p[2])
+    p[0] = StatementPart(p[2])
 
 
 def p_assignment_list(p):
     '''
-    assignment_list : assignment statement_part
+    assignment_list : assignment statement_list
     '''
 
     if len(p) == 2:
@@ -163,12 +174,19 @@ def p_assignment_list(p):
 
 
 def p_assingment(p):
-    """ assignment : identifier ASSIGNMENT expression SEMICOLON
-                    | identifier LPARENARR term RPARENARR ASSIGNMENT expression SEMICOLON """
-    if len(p) == 2:
+    """ assignment : identifier ASSIGNMENT expression ending
+                    | identifier LPARENARR term RPARENARR ASSIGNMENT expression ending
+     """
+    if len(p) == 5:
         p[0] = Assignment(p[1], p[3])
     else:
         p[0] = ArrayAssignment(p[1], p[3], p[6])
+
+def p_ending(p):
+    ''' ending : SEMICOLON
+                | empty '''
+
+    p[0] = p[1]
 
 
 def p_expression(p):
@@ -239,7 +257,8 @@ def p_function_call(p):
 def p_variable_declaration_list(p):
     '''
     variable_declaration_list : variable_declaration
-                            | variable_declaration variable_declaration_list
+                                | variable_declaration variable_declaration_list
+
     '''
     if len(p) == 2:
         p[0] = p[1]
@@ -250,18 +269,23 @@ def p_variable_declaration_list(p):
 def p_variable_declaration(p):
     '''
     variable_declaration : identifier_list COLON simple_type_name SEMICOLON
-                        | type_definition
+                        | identifier COLON simple_type_name SEMICOLON
+                        | identifier COLON identifier SEMICOLON
+                        | identifier COLON ARRAY LPARENARR INTEGER DD INTEGER RPARENARR OF simple_type_name SEMICOLON
     '''
     if len(p) == 2:
         p[0] = p[1]
-    else:
+    if len(p) == 5:
         p[0] = VariableDeclaration(p[1], p[3])
+    else:
+        p[0] = ArrayType(p[1], p[5], p[7], p[10])
 
 
 def p_identifier_list(p):
     '''
-    identifier_list : identifier
-                    | identifier COMMA identifier_list
+    identifier_list : identifier COMMA identifier_list
+                    | identifier COMMA identifier
+                    | empty
     '''
     if len(p) == 2:
         p[0] = p[1]
@@ -273,7 +297,8 @@ def p_simple_type_name(p):
     ''' simple_type_name : SSTRING
                         | SCHAR
                         | SREAL
-                        | SINTEGER '''
+                        | SINTEGER
+                        | identifier '''
 
     p[0] = SimpleTypeName(p[1])
 

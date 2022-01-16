@@ -54,7 +54,6 @@ tokens = (
     'SCHAR',
 )
 
-# Regular statement rules for tokens.
 t_DOT = r"\."
 
 t_ASSIGNMENT = r":="
@@ -76,9 +75,9 @@ t_LPAREN = r"\("
 t_RPAREN = r"\)"
 t_LPARENARR = r"\["
 t_RPARENARR = r"\]"
-t_DDD = r"\.."
+t_DD = r"\.."
 
-reserved_keywords = {
+reserved = {
     'program': 'PROGRAM',
     'var': 'VAR',
     'type': 'TYPE',
@@ -111,8 +110,8 @@ def t_BOOLEAN(t):
 
 def t_IDENTIFIER(t):
     r"[a-zA-Z][a-zA-Z0-9]*"
-    if t.value.lower() in reserved_keywords:
-        t.type = reserved_keywords[t.value.lower()]
+    if t.value.lower() in reserved:
+        t.type = reserved[t.value.lower()]
     return t
 
 
