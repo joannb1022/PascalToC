@@ -17,7 +17,7 @@ def p_empty(p):
 
 def p_program(p):
     '''
-    program : program_heading type_definition_part variable_declaration_part function_declaration_part compound_statement DOT
+    program : program_heading type_definition_part variable_declaration_part function_declaration_part compound_statement
     '''
     p[0] = Program(p[1], p[2], p[3], p[4], p[5])
 
@@ -29,11 +29,19 @@ def p_program_heading(p):
     p[0] = ProgramHeading(p[1])
 
 
+def p_declaration_part(p):
+    '''
+    declaration_part : type_definition_part variable_declaration_part function_declaration_part
+    '''
+    p[0] = Declaration(p[1], p[2], p[3])
+
+
+
 def p_block(p):
     '''
-    block :  variable_declaration_part BEGIN statement_list END SEMICOLON
+    block :  declaration_part statement_part
     '''
-    p[0] = Block(p[1], p[3])
+    p[0] = Block(p[1], p[2])
 
 
 def p_type_definition_part(p):
@@ -114,15 +122,6 @@ def p_type_definition(p):
 
     p[0] = ArrayTypeDefinition(p[1], p[5], p[7], p[10])
 
-def p_statement_list(p):
-    ''' statement_list : statement_part statement_list
-                        | empty '''
-
-    if len(p) == 2:
-        p[0] = p[1]
-    else:
-        p[0] = StatementPartList(p[1], p[2])
-
 def p_statement_part(p):
     '''
     statement_part : compound_statement
@@ -140,15 +139,23 @@ def p_statement_part(p):
 
 def p_while_statement(p):
     '''
-    while_statement : WHILE expression DO statement_part SEMICOLON
+    while_statement : WHILE expression DO statement_part
     '''
 
     p[0] = While(p[2], p[4])
 
+def p_ending(p):
+    '''
+    ending : SEMICOLON
+            | empty
+    '''
+
+    p[0]=p[1]
+
 def p_if_else_statement(p):
     '''
-    if_else_statement : IF expression THEN statement_list SEMICOLON
-                        | IF expression THEN statement_list ELSE statement_list SEMICOLON
+    if_else_statement : IF expression THEN statement_part
+                        | IF expression THEN statement_part ELSE statement_part
     '''
 
     if len(p) == 5:
@@ -157,14 +164,15 @@ def p_if_else_statement(p):
         p[0] = IfElse(p[2], p[4], p[6])
 
 def p_compound_statement(p):
-    ''' compound_statement : BEGIN statement_list END ending
+    ''' compound_statement : BEGIN statement_part END SEMICOLON
+                            | BEGIN statement_part END DOT
                              '''
     p[0] = StatementPart(p[2])
 
 
 def p_assignment_list(p):
     '''
-    assignment_list : assignment statement_list
+    assignment_list : assignment statement_part
     '''
 
     if len(p) == 2:
@@ -175,19 +183,11 @@ def p_assignment_list(p):
 
 def p_assingment(p):
     """ assignment : identifier ASSIGNMENT expression ending
-                    | identifier LPARENARR term RPARENARR ASSIGNMENT expression ending
-     """
+                     | identifier LPARENARR term RPARENARR ASSIGNMENT expression ending """
     if len(p) == 5:
         p[0] = Assignment(p[1], p[3])
     else:
         p[0] = ArrayAssignment(p[1], p[3], p[6])
-
-def p_ending(p):
-    ''' ending : SEMICOLON
-                | empty '''
-
-    p[0] = p[1]
-
 
 def p_expression(p):
     ''' expression : term
