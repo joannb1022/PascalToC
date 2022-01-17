@@ -1,11 +1,12 @@
 program whileLoop;
 var
-   a: integer;
+   a, b: integer;
 
 begin
-   a := 10;
    while  a < 20  do
    begin
       a := a + 1;
+       b := 10;
    end;
-end;
+   a:=5;
+end.

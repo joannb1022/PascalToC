@@ -1,10 +1,11 @@
 #include <stdio.h> 
  
 int main(){ 
-int a; 
-a = 10;
+int a,b; 
 while(a < 20) {
 a = a + 1;
+b = 10;
 }
-return 0
+a = 5;
+return 0;
  }

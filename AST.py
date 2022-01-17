@@ -29,7 +29,7 @@ class Program:
 
 
 class StatementPartList:
-    def __init__(self, statement, s_list):
+    def __init__(self, s_list, statement):
         self.statement = statement
         self.s_list = s_list
 
@@ -251,6 +251,16 @@ class AssignmentList:
         output += f"{self.list.convert()}"
         return output
 
+class List:
+    def __init__(self, statement, list):
+        self.statement=statement
+        self.list = list
+
+    def convert(self):
+        output = ""
+        output += f"{self.statement.convert()}"
+        output += f"{self.list.convert()}"
+        return output
 
 class Assignment:
     def __init__(self, id, expression):
@@ -359,7 +369,7 @@ class FunctionDeclaration:
         output = ""
         output += f"{self.function_heading.convert()}"
         output += f"{self.block.convert()}"
-        output += f"return {self.function_heading.id.convert()}"
+        output += f"return {self.function_heading.id.convert()};"
         output += "\n}\n"
         return output
 

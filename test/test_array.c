@@ -7,5 +7,6 @@ float* n = vel;
 
 int* xx = arr1;
 int i,j; 
-Nonereturn 0;
+n[0] = 100;
+return 0;
  }
