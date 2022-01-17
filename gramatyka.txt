@@ -1,0 +1,123 @@
+program : program_heading type_definition_part variable_declaration_part function_declaration_part compound_statement_dot
+
+program_heading : PROGRAM identifier SEMICOLON
+
+declaration_part : type_definition_part variable_declaration_part function_declaration_part
+
+block :  declaration_part statement_part
+
+type_definition_part : TYPE type_definition_list
+                            | empty
+
+type_definition_list : type_definition
+                        | type_definition type_definition_list
+
+variable_declaration_part : VAR variable_declaration_list
+                            | empty
+
+variable_declaration_list : variable_declaration
+                             | variable_declaration variable_declaration_list
+
+function_declaration_part : function_declaration function_declaration_part
+                             | empty
+
+function_declaration : function_heading SEMICOLON block
+
+function_heading : FUNCTION identifier LPAREN parameters RPAREN COLON simple_type_name
+
+parameters : names_list COLON simple_type_name
+                    | names_list COLON simple_type_name SEMICOLON parameters
+
+variable_declaration : identifier_list COLON simple_type_name SEMICOLON
+                        | identifier COLON simple_type_name SEMICOLON
+                        | identifier COLON identifier SEMICOLON
+                        | identifier COLON ARRAY LPARENARR INTEGER DD INTEGER RPARENARR OF simple_type_name SEMICOLON
+
+names_list : identifier
+             | identifier COMMA names_list
+
+type_definition : identifier EQ ARRAY LPARENARR INTEGER DD INTEGER RPARENARR OF simple_type_name SEMICOLON
+
+statement_part : compound_statement
+                    | assignment_list
+                    | while_statement_list
+                    | if_else_statement_list
+                    | empty
+
+while_statement_list : while_statement statement_part
+
+if_else_statement_list : if_else_statement statement_part
+
+single_statement_part : assignment
+                    | while_statement
+                    | if_else_statement
+                    | empty
+
+while_statement : WHILE expression DO single_statement_part
+                    | WHILE expression DO BEGIN statement_part END SEMICOLON
+
+ending : SEMICOLON
+         | empty
+
+then_statement : single_statement_part
+                 | BEGIN statement_part END SEMICOLON
+
+else_statement : single_statement_part
+               | BEGIN statement_part END
+
+if_else_statement : IF expression THEN then_statement
+                    | IF expression THEN else_statement ELSE then_statement
+
+compound_statement : BEGIN statement_part END SEMICOLON
+
+compound_statement_dot : BEGIN statement_part END DOT
+
+assignment_list : assignment statement_part
+
+assignment : identifier ASSIGNMENT expression ending
+                     | identifier LPARENARR term RPARENARR ASSIGNMENT expression ending
+
+function_call : identifier LPAREN identifier_list RPAREN
+
+identifier_list : identifier COMMA identifier_list
+                    | identifier
+
+simple_type_name : SSTRING
+                        | SCHAR
+                        | SREAL
+                        | SINTEGER
+
+identifier : IDENTIFIER
+
+empty :
+
+expression : term
+             | expression sign term
+             | expression and_or expression
+
+and_or : AND
+       | OR
+
+sign : PLUS
+      | MINUS
+      | EQ
+      | NEQ
+      | GT
+      | LT
+      | GTE
+      | LTE
+
+term : integer
+        | real
+        | char
+        | string
+        | function_call
+        | identifier
+
+integer : INTEGER
+
+real : REAL
+
+string : STRING
+
+ char : CHAR

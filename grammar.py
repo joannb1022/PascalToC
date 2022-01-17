@@ -141,7 +141,6 @@ def p_while_statement_list(p):
 
     p[0] = List(p[1], p[2])
 
-
 def p_if_else_statement_list(p):
     """ if_else_statement_list : if_else_statement statement_part """
     p[0] = List(p[1], p[2])
