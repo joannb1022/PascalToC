@@ -102,7 +102,10 @@ def p_function_heading(p):
 def p_parameters(p):
     """ parameters : names_list COLON simple_type_name
                     | names_list COLON simple_type_name SEMICOLON parameters"""
-    p[0] = Parameters(p[1], p[3])
+    if len(p) == 4:
+        p[0] = Parameters(p[1], p[3])
+    else:
+        p[0] = Parameters(p[1], p[3], p[5])
 
 
 def p_names_list(p):
@@ -177,6 +180,7 @@ def p_then_statement(p):
     else:
         p[0] = p[2]
 
+
 def p_single_statement_part_else(p):
     """ single_statement_part_else : assignment_else
                                     | while_statement
@@ -184,6 +188,7 @@ def p_single_statement_part_else(p):
                                     | empty
                                     """
     p[0] = p[1]
+
 
 def p_assignment_else(p):
     """ assignment_else :  identifier ASSIGNMENT expression
@@ -193,6 +198,7 @@ def p_assignment_else(p):
         p[0] = Assignment(p[1], p[3])
     else:
         p[0] = ArrayAssignment(p[1], p[3], p[6])
+
 
 def p_else_statement(p):
     """ else_statement : single_statement_part_else
@@ -330,12 +336,12 @@ def p_variable_declaration_list(p):
 def p_variable_declaration(p):
     """
     variable_declaration : identifier_list COLON simple_type_name SEMICOLON
+                        | identifier_list COLON SSTRING SEMICOLON
                         | identifier COLON simple_type_name SEMICOLON
+                        | identifier COLON SSTRING SEMICOLON
                         | identifier COLON identifier SEMICOLON
                         | identifier COLON ARRAY LPARENARR INTEGER DD INTEGER RPARENARR OF simple_type_name SEMICOLON
     """
-    if len(p) == 2:
-        p[0] = p[1]
     if len(p) == 5:
         p[0] = VariableDeclaration(p[1], p[3])
     else:

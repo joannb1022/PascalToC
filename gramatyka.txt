@@ -29,7 +29,9 @@ parameters : names_list COLON simple_type_name
                     | names_list COLON simple_type_name SEMICOLON parameters
 
 variable_declaration : identifier_list COLON simple_type_name SEMICOLON
+                        | identifier_list COLON SSTRING SEMICOLON
                         | identifier COLON simple_type_name SEMICOLON
+                        | identifier COLON SSTRING SEMICOLON
                         | identifier COLON identifier SEMICOLON
                         | identifier COLON ARRAY LPARENARR INTEGER DD INTEGER RPARENARR OF simple_type_name SEMICOLON
 

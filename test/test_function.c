@@ -1,32 +1,32 @@
 #include <stdio.h> 
- 
-int max(int  num1, int num2){ 
+#include <string.h> 
+
+int max(int  num1, int num2, char* name_string){ 
  int max; 
-int a; 
-
-
-if(num1 < 20){
-   if(a < 10){
-   a = 10;
+int result;
+if(num1 > num2){
+if(num1 < 1000){
+result = 2000;
 }
- else {
-   a = 100;
+else {
+result = num2;
 }
 }
- else {
-   while(a < 400) {
-a = a + 100;
+else {
+result = num1;
 }
-}
-a = 10;
+max = result;
 
 return max;
 }
 
 int main(){ 
-int ret,a,b; 
+int a,b,ret;
+
+char c[100];
 a = 100;
 b = 200;
-ret = max(a,b);
+strcpy(c, "hej");
+ret = max(a,b,c);
 return 0;
  }

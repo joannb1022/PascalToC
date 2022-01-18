@@ -109,7 +109,7 @@ def t_BOOLEAN(t):
 
 
 def t_IDENTIFIER(t):
-    r"[a-zA-Z][a-zA-Z0-9]*"
+    r"[\_a-zA-Z][a-zA-Z0-9\_]*"
     if t.value.lower() in reserved:
         t.type = reserved[t.value.lower()]
     return t

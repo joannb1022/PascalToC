@@ -4,22 +4,22 @@ class Empty:
 
 
 class Program:
-    def __init__(self, program_heading, type, var, func, comp):
+    def __init__(self, program_heading, data_type, var, func, comp):
         self.program_heading = program_heading
-        self.type = type
+        self.data_type = data_type
         self.var = var
         self.func = func
         self.comp = comp
 
     def convert(self):
         output = ""
-        output += "#include <stdio.h> \n \n"
+        output += "#include <stdio.h> \n#include <string.h> \n\n"
         if not isinstance(self.func, Empty):
             output += self.func.convert()
         if not isinstance(self.program_heading, Empty):
             output += self.program_heading.convert()
-        if not isinstance(self.type, Empty):
-            output += self.type.convert()
+        if not isinstance(self.data_type, Empty):
+            output += self.data_type.convert()
         if not isinstance(self.var, Empty):
             output += self.var.convert()
         if not isinstance(self.comp, Empty):
@@ -58,7 +58,7 @@ class Block:
     def convert(self):
         output = ""
         if not isinstance(self.declaration_part, Empty):
-            output += f"{self.declaration_part.convert()}\n"
+            output += f"{self.declaration_part.convert()}"
         if not isinstance(self.statement_part, Empty):
             output += f"{self.statement_part.convert()}\n"
         return output
@@ -75,15 +75,15 @@ class Declaration:
         if not isinstance(self.type_definition_part, Empty):
             output += f"{self.type_definition_part.convert()}\n"
         if not isinstance(self.variable_definition_part, Empty):
-            output += f"{self.variable_definition_part.convert()}\n"
+            output += f"{self.variable_definition_part.convert()}"
         if not isinstance(self.func_part, Empty):
             output += f"{self.func_part.convert()}\n"
         return output
 
 
 class IdentifierList:
-    def __init__(self, id, id_list):
-        self.id = id
+    def __init__(self, identifier, id_list):
+        self.id = identifier
         self.id_list = id_list
 
     def convert(self):
@@ -91,8 +91,8 @@ class IdentifierList:
 
 
 class FunctionCall:
-    def __init__(self, id, variables_list):
-        self.id = id
+    def __init__(self, identifier, variables_list):
+        self.id = identifier
         self.variables_list = variables_list
 
     def convert(self):
@@ -100,11 +100,11 @@ class FunctionCall:
 
 
 class ArrayType:
-    def __init__(self, id, idx1, idx2, type):
-        self.id = id
+    def __init__(self, identifier, idx1, idx2, data_type):
+        self.id = identifier
         self.idx1 = idx1
         self.idx2 = idx2
-        self.type = type
+        self.type = data_type
 
     def convert(self):
         output = ""
@@ -116,14 +116,13 @@ types = {}
 
 
 class ArrayTypeDefinition:
-    def __init__(self, id, idx1, idx2, type):
-        self.id = id
+    def __init__(self, identifier, idx1, idx2, data_type):
+        self.id = identifier
         self.idx1 = idx1
         self.idx2 = idx2
-        self.type = type
+        self.type = data_type
 
-        types.update({f"{id.convert()}": type})
-        print(types)
+        types.update({f"{identifier.convert()}": data_type})
 
     def convert(self):
         output = ""
@@ -132,8 +131,8 @@ class ArrayTypeDefinition:
 
 
 class ArrayAssignment:
-    def __init__(self, id, term, expression):
-        self.id = id
+    def __init__(self, identifier, term, expression):
+        self.id = identifier
         self.term = term
         self.expression = expression
 
@@ -145,8 +144,8 @@ class ArrayAssignment:
 
 
 class TypeDefinitionList:
-    def __init__(self, type, type_list):
-        self.type = type
+    def __init__(self, data_type, type_list):
+        self.type = data_type
         self.type_list = type_list
 
     def convert(self):
@@ -241,9 +240,9 @@ class Expression:
 
 
 class AssignmentList:
-    def __init__(self, assignmet, list):
+    def __init__(self, assignmet, as_list):
         self.assignment = assignmet
-        self.list = list
+        self.list = as_list
 
     def convert(self):
         output = ""
@@ -251,10 +250,11 @@ class AssignmentList:
         output += f"{self.list.convert()}"
         return output
 
+
 class List:
-    def __init__(self, statement, list):
-        self.statement=statement
-        self.list = list
+    def __init__(self, statement, my_list):
+        self.statement = statement
+        self.list = my_list
 
     def convert(self):
         output = ""
@@ -262,14 +262,18 @@ class List:
         output += f"{self.list.convert()}"
         return output
 
+
 class Assignment:
-    def __init__(self, id, expression):
-        self.id = id
+    def __init__(self, identifier, expression):
+        self.id = identifier
         self.expression = expression
 
     def convert(self):
         output = ""
-        output += self.id.convert() + " = " + str(self.expression.convert()) + ";\n"
+        if f"{self.id.convert()}" in strings:
+            output += f"strcpy({self.id.convert()}, {self.expression.convert()});\n"
+        else:
+            output += self.id.convert() + " = " + str(self.expression.convert()) + ";\n"
         return output
 
 
@@ -298,7 +302,7 @@ class IfElse:
         self.statement2 = statement2
 
     def convert(self):
-        return "if(" + self.expression.convert() + "){\n   " + self.statement1.convert() + "}\n else {\n   " + self.statement2.convert() + "}\n"
+        return "if(" + self.expression.convert() + "){\n" + self.statement1.convert() + "}\nelse {\n" + self.statement2.convert() + "}\n"
 
 
 class VariablesList:
@@ -330,19 +334,22 @@ class SimpleTypeName:
         elif self.data_type == "real":
             return "float"
         elif self.data_type == "string":
-            return "char"
+            return "char*"
         else:
             return f"{self.data_type}"
 
 
 class Parameters:
-    def __init__(self, names_list, type):
+    def __init__(self, names_list, data_type, p_list=None):
         self.names_list = names_list
-        self.type = type
+        self.type = data_type
+        self.p_list = p_list
 
     def convert(self):
         output = ""
         output += f"{self.names_list.convert(self.type)}"
+        if self.p_list:
+            output += f",{self.p_list.convert()}"
         return output
 
 
@@ -382,9 +389,6 @@ class FunctionHeading:
 
     def convert(self):
         output = f"{self.type.convert()}"
-
-        if f"{self.type}" == "type: string":
-            output += "*"
         output += f" {self.id.convert()}"
         output += "("
         if not isinstance(self.parameters, Empty):
@@ -405,16 +409,7 @@ class Function:
         return output
 
 
-class Variable:
-    def __init__(self, identifier, data_type):
-        self.id = identifier
-        self.data_type = data_type
-
-    def convert(self):
-        if f"{self.data_type}" == "type: string":
-            return f"{self.data_type.convert()} *{self.id.convert()};"
-        else:
-            return f"{self.data_type.convert()} {self.id.convert()};"
+strings = []
 
 
 class VariableDeclaration:
@@ -426,8 +421,11 @@ class VariableDeclaration:
         res = ""
         if isinstance(self.data_type, Identifier):
             res += f"\n{types[self.data_type.convert()].convert()}* {self.id_list.convert()} = {self.data_type.convert()};"
+        elif f"{self.data_type}" == "string":
+            res += f"char {self.id_list.convert()}[100];\n"
+            strings.append(f"{self.id_list.convert()}")
         else:
-            res += f"{self.data_type.convert()} {self.id_list.convert()}; \n"
+            res += f"{self.data_type.convert()} {self.id_list.convert()};\n"
         return res
 
 

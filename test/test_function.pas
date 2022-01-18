@@ -1,26 +1,27 @@
 program exFunction;
 var
-    ret, a, b : integer;
+   a, b, ret : integer;
+   c : string;
 
-function max(num1, num2: integer): integer;
+function max(num1, num2: integer; name_string : string): integer;
 var
-  a: integer;
+   result: integer;
 begin
-    if num1 < 20 then
-    begin
-        if a < 10 then
-            a := 10
+   if num1 > num2 then
+        begin
+        if num1 < 1000 then
+            result := 2000
         else
-            a := 100;
-    end
+            result := num2;
+        end
     else
-        while a < 400 do
-            a := a + 100;
-    a:=10;
-
+        result := num1;
+   max := result;
 end;
+
 begin
    a := 100;
    b := 200;
-   ret := max(a, b);
+   c := 'hej';
+   ret := max(a, b, c);
 end.
