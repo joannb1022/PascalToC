@@ -9,7 +9,9 @@ begin
     if num1 < 20 then
     begin
         if a < 10 then
-            a := 10;
+            a := 10
+        else
+            a := 100;
     end
     else
         while a < 400 do

@@ -168,15 +168,6 @@ def p_while_statement(p):
         p[0] = While(p[2], p[5])
 
 
-def p_ending(p):
-    """
-    ending : SEMICOLON
-            | empty
-    """
-
-    p[0] = p[1]
-
-
 def p_then_statement(p):
     """ then_statement : single_statement_part
                         | BEGIN statement_part END SEMICOLON"""
@@ -186,9 +177,25 @@ def p_then_statement(p):
     else:
         p[0] = p[2]
 
+def p_single_statement_part_else(p):
+    """ single_statement_part_else : assignment_else
+                                    | while_statement
+                                    | if_else_statement
+                                    | empty
+                                    """
+    p[0] = p[1]
+
+def p_assignment_else(p):
+    """ assignment_else :  identifier ASSIGNMENT expression
+                        | identifier LPARENARR integer RPARENARR ASSIGNMENT expression """
+
+    if len(p) == 4:
+        p[0] = Assignment(p[1], p[3])
+    else:
+        p[0] = ArrayAssignment(p[1], p[3], p[6])
 
 def p_else_statement(p):
-    """ else_statement : single_statement_part
+    """ else_statement : single_statement_part_else
                         | BEGIN statement_part END  """
 
     if len(p) == 2:
@@ -233,13 +240,11 @@ def p_assignment_list(p):
 
 
 def p_assignment(p):
-    """ assignment : identifier ASSIGNMENT expression ending
-                     | identifier LPARENARR term RPARENARR ASSIGNMENT expression ending
+    """ assignment : identifier ASSIGNMENT expression SEMICOLON
+                     | identifier LPARENARR integer RPARENARR ASSIGNMENT expression SEMICOLON
                  """
     if len(p) == 5:
         p[0] = Assignment(p[1], p[3])
-    elif len(p) == 2:
-        p[0] = p[1]
     else:
         p[0] = ArrayAssignment(p[1], p[3], p[6])
 

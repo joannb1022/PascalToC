@@ -8,5 +8,6 @@ var
    i, j: integer;
 
 begin
+   n [1] :=10;
    n[ 0 ] := 100;
 end.

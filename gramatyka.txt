@@ -56,17 +56,22 @@ single_statement_part : assignment
 while_statement : WHILE expression DO single_statement_part
                     | WHILE expression DO BEGIN statement_part END SEMICOLON
 
-ending : SEMICOLON
-         | empty
-
 then_statement : single_statement_part
                  | BEGIN statement_part END SEMICOLON
 
-else_statement : single_statement_part
-               | BEGIN statement_part END
+else_statement : single_statement_part_else
+                 | BEGIN statement_part END
 
 if_else_statement : IF expression THEN then_statement
                     | IF expression THEN else_statement ELSE then_statement
+
+single_statement_part_else : assignment_else
+                              | while_statement
+                              | if_else_statement
+                              | empty
+
+assignment_else :  identifier ASSIGNMENT expression
+                   | identifier LPARENARR integer RPARENARR ASSIGNMENT expression
 
 compound_statement : BEGIN statement_part END SEMICOLON
 
@@ -74,8 +79,8 @@ compound_statement_dot : BEGIN statement_part END DOT
 
 assignment_list : assignment statement_part
 
-assignment : identifier ASSIGNMENT expression ending
-                     | identifier LPARENARR term RPARENARR ASSIGNMENT expression ending
+assignment : identifier ASSIGNMENT expression SEMICOLON
+                     | identifier LPARENARR integer RPARENARR ASSIGNMENT expression SEMICOLON
 
 function_call : identifier LPAREN identifier_list RPAREN
 

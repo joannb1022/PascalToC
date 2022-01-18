@@ -18,15 +18,15 @@ if __name__ == '__main__':
     log = logging.getLogger()
     parser = yacc.yacc(start="program", debug=True, errorlog=log)
 
-    # test = open('test/test_while.pas', 'r')
-    test = open('test/test_function.pas', 'r')
+    test = open('test/test_while.pas', 'r')
+    # test = open('test/test_function.pas', 'r')
     # test = open('test/test_array.pas', 'r')
     data = test.read()
 
     ast = parser.parse(input=data, lexer=lexer)
 
-    # file = open('test/test_while.c', 'w')
-    file = open('test/test_function.c', 'w')
+    file = open('test/test_while.c', 'w')
+    # file = open('test/test_function.c', 'w')
     # file = open('test/test_array.c', 'w')
 
     file.write(ast.convert())

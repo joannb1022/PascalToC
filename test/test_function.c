@@ -7,7 +7,10 @@ int a;
 
 if(num1 < 20){
    if(a < 10){
-a = 10;
+   a = 10;
+}
+ else {
+   a = 100;
 }
 }
  else {
