@@ -2,6 +2,6 @@
 AGH, Informatyka, V semestr
 
 
-# Kompilator Pascala na C napisany w Pythonie
+## Kompilator Pascala na C napisany w Pythonie
 
 * generator parserów: PLY
