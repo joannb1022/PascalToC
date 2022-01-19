@@ -1,12 +1,15 @@
 program whileLoop;
 var
    a, b: integer;
+   n : char;
 
 begin
+   a:=15;
+   b :=100;
    while  a < 20  do
    begin
       a := a + 1;
-       b := 10;
+       b := b - 10;
    end;
-   a:=5;
+   n :='n';
 end.

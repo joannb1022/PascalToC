@@ -3,10 +3,14 @@
 
 int main(){ 
 int a,b;
+
+char n;
+a = 15;
+b = 100;
 while(a < 20) {
 a = a + 1;
-b = 10;
+b = b - 10;
 }
-a = 5;
+n = 'n';
 return 0;
  }
